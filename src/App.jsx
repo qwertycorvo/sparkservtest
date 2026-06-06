@@ -9,6 +9,7 @@ import UserManagement from './pages/UserManagement';
 import JobTracking from './pages/JobTracking';
 import RequestRepair from './pages/RequestRepair';
 import Payments from './pages/Payments';
+import SupportTickets from './pages/SupportTickets';
 
 // Mock components for other routes
 const Placeholder = ({ title }) => (
@@ -34,6 +35,7 @@ function App() {
             <Route path="/history" element={<Placeholder title="Repair History" />} />
             <Route path="/bookings" element={<Placeholder title="Booking Review" />} />
             <Route path="/payments" element={<Payments />} />
+            <Route path="/tickets" element={<SupportTickets />} />
             <Route path="/messages" element={<Placeholder title="Messages" />} />
             <Route path="/navigation" element={<JobTracking />} />
           </Route>

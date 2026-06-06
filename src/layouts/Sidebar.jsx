@@ -12,7 +12,8 @@ import {
   History,
   MapPin,
   CreditCard,
-  Bot
+  Bot,
+  Ticket
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { clsx } from 'clsx';
@@ -30,12 +31,14 @@ const Sidebar = () => {
       { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
       { icon: Users, label: 'User Management', path: '/users' },
       { icon: ClipboardList, label: 'Booking Review', path: '/bookings' },
+      { icon: Ticket, label: 'Support Tickets', path: '/tickets' },
       { icon: CreditCard, label: 'Transactions', path: '/payments' },
     ],
     customer: [
       { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
       { icon: PlusCircle, label: 'Request Repair', path: '/request' },
       { icon: Wrench, label: 'My Appliances', path: '/appliances' },
+      { icon: Ticket, label: 'Support Tickets', path: '/tickets' },
       { icon: History, label: 'Repair History', path: '/history' },
     ],
     technician: [
