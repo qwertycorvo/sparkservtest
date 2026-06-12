@@ -15,13 +15,24 @@ const JobTracking = () => {
   const [activeJob, setActiveJob] = useState({
     id: 'SR-1025',
     customer: 'Alice Smith',
-    address: 'USTP Campus, C.M. Recto Ave, Lapasan',
+    address: 'USTP Campus, C.M. Recto Ave, Lapasan, Cagayan de Oro City',
     landmark: 'Near Engineering Building',
     appliance: 'Washing Machine (LG Smart)',
     issue: 'Heavy vibration during spin cycle',
     status: 'Assigned', // Assigned -> In Progress -> Completed
     time: 'Today, 2:00 PM',
   });
+
+  const getGoogleMapsEmbedUrl = (address) => {
+    const encodedAddress = encodeURIComponent(address);
+    return `https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15730.59239330278!2d124.63008850341127!3d8.477388846780254!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32fff633e4ee8ef9%3A0x80d629e5d10844e1!2sUniversity%20of%20Science%20and%20Technology%20of%20Southern%20Philippines!5e0!3m2!1sen!2sph!4v1718155783336!5m2!1sen!2sph`;
+  };
+
+  const openGoogleMapsDirections = () => {
+    const destination = encodeURIComponent(activeJob.address);
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+    window.open(url, '_blank');
+  };
 
   const cdoLocations = [
     { name: 'Divisoria (Plaza Divisoria)', address: 'R.N. Abejuela St, Cagayan de Oro', landmark: 'Golden Friendship Park' },
@@ -130,16 +141,24 @@ const JobTracking = () => {
         {/* Right Column: Navigation & Contact */}
         <div className="space-y-6">
           <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
-            <div className="h-48 bg-slate-200 flex items-center justify-center relative">
-              <MapPin className="h-12 w-12 text-primary-500 absolute z-10" />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/20 to-transparent" />
-              {/* This would be a real Google Map in production */}
-              <div className="text-slate-500 font-bold uppercase tracking-widest text-xs">Map View (Mockup)</div>
+            <div className="h-64 bg-slate-200">
+              <iframe
+                title="Google Maps - Customer Location"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                src={getGoogleMapsEmbedUrl(activeJob.address)}
+              ></iframe>
             </div>
             <div className="p-6">
-              <button className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all mb-4">
+              <button 
+                onClick={openGoogleMapsDirections}
+                className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-slate-800 transition-all mb-4"
+              >
                 <Navigation className="h-5 w-5" />
-                Get Directions
+                Get Directions via Google Maps
               </button>
               <p className="text-xs text-slate-400 text-center flex items-center justify-center gap-1">
                 <Info className="h-3 w-3" />
@@ -159,6 +178,16 @@ const JobTracking = () => {
                 <MessageSquare className="h-6 w-6" />
                 <span className="text-xs font-bold">Message</span>
               </button>
+            </div>
+          </div>
+
+          <div className="bg-blue-50 p-6 rounded-3xl border border-blue-100">
+            <h4 className="text-sm font-bold text-blue-900 mb-3">How Google Maps Works in SparkServ</h4>
+            <div className="space-y-2 text-xs text-blue-700">
+              <p>1. **Location Pinning**: Customers input their address with CDO-specific landmarks.</p>
+              <p>2. **Embedded Map View**: Shows customer location directly on the technician dashboard.</p>
+              <p>3. **One-Tap Directions**: Opens Google Maps with turn-by-turn navigation.</p>
+              <p>4. **Privacy Control**: Location only accessible when job is active, hidden after completion.</p>
             </div>
           </div>
         </div>
