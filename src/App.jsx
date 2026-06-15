@@ -9,6 +9,7 @@ import Appliances from './pages/Appliances';
 import UserManagement from './pages/UserManagement';
 import JobTracking from './pages/JobTracking';
 import RequestRepair from './pages/RequestRepair';
+import RepairHistory from './pages/RepairHistory';
 import Payments from './pages/Payments';
 import SupportTickets from './pages/SupportTickets';
 
@@ -34,7 +35,7 @@ function App() {
             <Route path="/users" element={<UserManagement />} />
             <Route path="/jobs" element={<JobTracking />} />
             <Route path="/request" element={<RequestRepair />} />
-            <Route path="/history" element={<Placeholder title="Repair History" />} />
+            <Route path="/history" element={<RepairHistory />} />
             <Route path="/bookings" element={<Placeholder title="Booking Review" />} />
             <Route path="/payments" element={<Payments />} />
             <Route path="/tickets" element={<SupportTickets />} />
