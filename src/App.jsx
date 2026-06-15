@@ -11,6 +11,7 @@ import JobTracking from './pages/JobTracking';
 import RequestRepair from './pages/RequestRepair';
 import RepairHistory from './pages/RepairHistory';
 import BookingReview from './pages/BookingReview';
+import Inquiry from './pages/Inquiry';
 import Payments from './pages/Payments';
 import SupportTickets from './pages/SupportTickets';
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/appliances" element={<Appliances />} />
             <Route path="/users" element={<UserManagement />} />
             <Route path="/jobs" element={<JobTracking />} />
+            <Route path="/inquiry" element={<Inquiry />} />
             <Route path="/request" element={<RequestRepair />} />
             <Route path="/history" element={<RepairHistory />} />
             <Route path="/bookings" element={<BookingReview />} />

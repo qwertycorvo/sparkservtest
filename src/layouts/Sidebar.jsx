@@ -13,7 +13,8 @@ import {
   MapPin,
   CreditCard,
   Eye,
-  Ticket
+  Ticket,
+  HelpCircle
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { clsx } from 'clsx';
@@ -37,6 +38,7 @@ const Sidebar = () => {
     ],
     customer: [
       { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+      { icon: HelpCircle, label: 'Inquiry', path: '/inquiry' },
       { icon: PlusCircle, label: 'Request Repair', path: '/request' },
       { icon: Wrench, label: 'My Appliances', path: '/appliances' },
       { icon: Ticket, label: 'Support Tickets', path: '/tickets' },
@@ -100,7 +102,7 @@ const Sidebar = () => {
         </div>
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+          className="flex w-full items-center gap-3 px-3 py-2 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-all"
         >
           <LogOut className="h-5 w-5" />
           Logout
