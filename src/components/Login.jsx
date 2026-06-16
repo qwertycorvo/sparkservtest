@@ -39,7 +39,7 @@ const Login = () => {
             </div>
             <div>
               <span className="text-3xl font-black tracking-tighter italic block leading-none">SPARKSERV</span>
-              <span className="text-[10px] font-bold tracking-[0.2em] text-accent-400 uppercase">Hanap Usap Fix</span>
+              <span className="text-lg font-bold tracking-[0.2em] text-accent-400 uppercase">Hanap Usap Fix</span>
             </div>
           </div>
 
@@ -82,7 +82,7 @@ const Login = () => {
             </div>
             <div>
               <span className="text-2xl font-black tracking-tighter italic text-primary-900 block leading-none">SPARKSERV</span>
-              <span className="text-[8px] font-bold tracking-[0.2em] text-accent-600 uppercase">Hanap Usap Fix</span>
+              <span className="text-sm font-bold tracking-[0.2em] text-accent-600 uppercase">Hanap Usap Fix</span>
             </div>
           </div>
 
