@@ -46,7 +46,7 @@ const Sidebar = () => {
     ],
     customer: [
       { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-      { icon: HelpCircle, label: 'Inquiry', path: '/inquiry' },
+      { icon: HelpCircle, label: 'Troubleshooting Guide', path: '/troubleshooting' },
       { icon: PlusCircle, label: 'Request Repair', path: '/request' },
       { icon: TrendingUp, label: 'Progress Tracking', path: '/progress' },
       { icon: Wrench, label: 'My Appliances', path: '/appliances' },
@@ -59,6 +59,16 @@ const Sidebar = () => {
       { icon: ClipboardList, label: 'Active Jobs', path: '/jobs' },
       { icon: MessageSquare, label: 'Messages', path: '/messages' },
       { icon: MapPin, label: 'Navigation', path: '/navigation' },
+    ],
+    system_admin: [
+      { icon: LayoutDashboard, label: 'System Dashboard', path: '/dashboard' },
+      { icon: Users, label: 'User Management', path: '/users' },
+      { icon: Activity, label: 'Progress Management', path: '/admin-progress' },
+      { icon: Eye, label: 'Job Monitoring', path: '/job-monitoring' },
+      { icon: ClipboardList, label: 'Booking Review', path: '/bookings' },
+      { icon: Ticket, label: 'Support Tickets', path: '/tickets' },
+      { icon: CreditCard, label: 'Transactions', path: '/payments' },
+      { icon: Settings, label: 'System Settings', path: '/settings' },
     ]
   };
 

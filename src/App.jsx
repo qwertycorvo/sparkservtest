@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
+import { DataProvider } from './context/DataContext';
 import Login from './components/Login';
 import DashboardLayout from './layouts/DashboardLayout';
 import DashboardOverview from './pages/DashboardOverview';
@@ -17,6 +18,7 @@ import AdminProgressTracking from './pages/AdminProgressTracking';
 import TechnicianProgressTracking from './pages/TechnicianProgressTracking';
 import Payments from './pages/Payments';
 import SupportTickets from './pages/SupportTickets';
+import TroubleshootingGuide from './pages/TroubleshootingGuide';
 
 // Mock components for other routes
 const Placeholder = ({ title }) => (
@@ -29,32 +31,36 @@ const Placeholder = ({ title }) => (
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<DashboardOverview />} />
-            <Route path="/job-monitoring" element={<JobMonitoring />} />
-            <Route path="/appliances" element={<Appliances />} />
-            <Route path="/users" element={<UserManagement />} />
-            <Route path="/jobs" element={<JobTracking />} />
-            <Route path="/inquiry" element={<Inquiry />} />
-            <Route path="/request" element={<RequestRepair />} />
-            <Route path="/progress" element={<ProgressTracking />} />
-            <Route path="/admin-progress" element={<AdminProgressTracking />} />
-            <Route path="/tech-progress" element={<TechnicianProgressTracking />} />
-            <Route path="/history" element={<RepairHistory />} />
-            <Route path="/bookings" element={<BookingReview />} />
-            <Route path="/payments" element={<Payments />} />
-            <Route path="/tickets" element={<SupportTickets />} />
-            <Route path="/messages" element={<Placeholder title="Messages" />} />
-            <Route path="/navigation" element={<JobTracking />} />
-          </Route>
+      <DataProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Login />} />
+            
+            <Route element={<DashboardLayout />}>
+              <Route path="/dashboard" element={<DashboardOverview />} />
+              <Route path="/job-monitoring" element={<JobMonitoring />} />
+              <Route path="/appliances" element={<Appliances />} />
+              <Route path="/users" element={<UserManagement />} />
+              <Route path="/jobs" element={<JobTracking />} />
+              <Route path="/inquiry" element={<Inquiry />} />
+              <Route path="/request" element={<RequestRepair />} />
+              <Route path="/progress" element={<ProgressTracking />} />
+              <Route path="/admin-progress" element={<AdminProgressTracking />} />
+              <Route path="/tech-progress" element={<TechnicianProgressTracking />} />
+              <Route path="/history" element={<RepairHistory />} />
+              <Route path="/bookings" element={<BookingReview />} />
+              <Route path="/payments" element={<Payments />} />
+              <Route path="/tickets" element={<SupportTickets />} />
+              <Route path="/messages" element={<Placeholder title="Messages" />} />
+              <Route path="/navigation" element={<JobTracking />} />
+              <Route path="/troubleshooting" element={<TroubleshootingGuide />} />
+              <Route path="/settings" element={<Placeholder title="System Settings" />} />
+            </Route>
 
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Router>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Router>
+      </DataProvider>
     </AuthProvider>
   );
 }
