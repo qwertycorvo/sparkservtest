@@ -493,16 +493,17 @@ const TroubleshootingGuide = () => {
             </button>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">EasyFix</h2>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">SparkServ</h2>
                 <p className="text-yellow-600 font-bold mb-4">Excellent 4.9 (51 reviews) | Top Pro</p>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">About</h3>
-                <p className="text-slate-600 mb-4">Hello! We are a versatile handyman service based in Bay Area, CA, offering comprehensive home repairs, IT equipment setup, small construction projects, and more.</p>
+                <p className="text-slate-600 mb-4">Hello! We are a local appliance repair service based in Cagayan de Oro, Philippines, offering comprehensive home repairs, aircon cleaning/refrigerator repair, washing machine repair, and more.</p>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">Overview</h3>
                 <p className="text-slate-600 mb-6">
                   Hired 95 times<br />
                   Background checked<br />
                   3 employees<br />
-                  1 year in business
+                  1 year in business<br />
+                  Serving CDO and nearby areas
                 </p>
                 <div className="flex gap-3">
                   <button className="flex-1 py-3 rounded-xl border border-slate-200 font-bold hover:bg-slate-50 transition-all">Message</button>
@@ -511,9 +512,9 @@ const TroubleshootingGuide = () => {
               </div>
               <div>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">Business hours</h3>
-                <p className="text-slate-600 mb-4">Sun: Closed<br />Mon: 10:00 am - 8:00 pm</p>
+                <p className="text-slate-600 mb-4">Sun: Closed<br />Mon-Sat: 8:00 am - 6:00 pm</p>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">Payment methods</h3>
-                <p className="text-slate-600 mb-6">Cash, Check, Venmo, and Zelle.</p>
+                <p className="text-slate-600 mb-6">Cash on Hand and GCash only.</p>
                 <div className="flex gap-3">
                   <button onClick={() => { setModalOpen(false); navigate('/request'); }} className="flex-1 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all">Book Now</button>
                   <button className="flex-1 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all">Request Estimate</button>
