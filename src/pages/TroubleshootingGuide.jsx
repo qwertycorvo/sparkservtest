@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, PlusCircle, X } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 
 /* KNOWLEDGE BASE (10+ ISSUES, ENGLISH + BISAYA) */
 const kb = {
@@ -297,7 +298,8 @@ const kb = {
 
 const TroubleshootingGuide = () => {
   const navigate = useNavigate();
-  const { standardPricing, applianceTypes, commonProblems, technicians, repairRequests } = useData();
+  const { standardPricing, applianceTypes, commonProblems, technicians, repairRequests, submitEstimateRequest, estimates } = useData();
+  const { user } = useAuth();
   const messagesEndRef = useRef(null);
   const [messages, setMessages] = useState([
     {
@@ -309,6 +311,8 @@ const TroubleshootingGuide = () => {
   const [input, setInput] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedTech, setSelectedTech] = useState(null);
+  const [requestForm, setRequestForm] = useState({ appliance: '', problem: '' });
+  const [requestSubmitted, setRequestSubmitted] = useState(false);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -493,16 +497,15 @@ const TroubleshootingGuide = () => {
             </button>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
               <div>
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">SparkServ</h2>
-                <p className="text-yellow-600 font-bold mb-4">Excellent 4.9 (51 reviews) | Top Pro</p>
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">{selectedTech.name}</h2>
+                <p className="text-yellow-600 font-bold mb-4">Excellent {selectedTech.rating} ({selectedTech.completedJobs} reviews) | Top Pro</p>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">About</h3>
-                <p className="text-slate-600 mb-4">Hello! We are a local appliance repair service based in Cagayan de Oro, Philippines, offering comprehensive home repairs, aircon cleaning/refrigerator repair, washing machine repair, and more.</p>
+                <p className="text-slate-600 mb-4">Local appliance repair technician based in Cagayan de Oro, Philippines, specializing in {selectedTech.expertise.join(', ')}.</p>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">Overview</h3>
                 <p className="text-slate-600 mb-6">
-                  Hired 95 times<br />
+                  Hired {selectedTech.completedJobs} times<br />
                   Background checked<br />
-                  3 employees<br />
-                  1 year in business<br />
+                  Available: {selectedTech.available ? 'Yes' : 'No'}<br />
                   Serving CDO and nearby areas
                 </p>
                 <div className="flex gap-3">
@@ -515,10 +518,94 @@ const TroubleshootingGuide = () => {
                 <p className="text-slate-600 mb-4">Sun: Closed<br />Mon-Sat: 8:00 am - 6:00 pm</p>
                 <h3 className="text-lg font-bold text-slate-900 mb-2">Payment methods</h3>
                 <p className="text-slate-600 mb-6">Cash on Hand and GCash only.</p>
-                <div className="flex gap-3">
-                  <button onClick={() => { setModalOpen(false); navigate('/request'); }} className="flex-1 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all">Book Now</button>
-                  <button className="flex-1 py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all">Request Estimate</button>
-                </div>
+
+                {/* Check if there's an estimate for this tech */}
+                {(() => {
+                  const existingEstimate = estimates.find(e => 
+                    e.technician === selectedTech.name && 
+                    e.customer === user?.name && 
+                    (e.status === 'sent' || e.status === 'accepted' || e.status === 'declined')
+                  );
+
+                  if (existingEstimate) {
+                    return (
+                      <div className="mb-6 p-4 bg-blue-50 rounded-xl border border-blue-100">
+                        <h4 className="font-bold text-slate-900 mb-2">Estimate Received:</h4>
+                        <p className="text-2xl font-bold text-primary-600 mb-2">{existingEstimate.amount}</p>
+                        <p className="text-slate-600 mb-4">{existingEstimate.description}</p>
+                        {existingEstimate.status === 'sent' ? (
+                          <div className="flex gap-3">
+                            <button 
+                              onClick={() => { /* accept logic here later */ }} 
+                              className="flex-1 py-3 rounded-xl bg-green-600 text-white font-bold hover:bg-green-700 transition-all"
+                            >
+                              Book Now (Accept Estimate)
+                            </button>
+                            <button 
+                              onClick={() => { /* decline logic here later */ }} 
+                              className="flex-1 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 transition-all"
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        ) : existingEstimate.status === 'accepted' ? (
+                          <div className="text-center py-3 bg-green-100 text-green-800 rounded-xl font-bold">
+                            Estimate Accepted!
+                          </div>
+                        ) : (
+                          <div className="text-center py-3 bg-red-100 text-red-800 rounded-xl font-bold">
+                            Estimate Declined
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+
+                  return null;
+                })()}
+
+                {!requestSubmitted ? (
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-bold text-slate-900 mb-2">Request an Estimate</h3>
+                    <select
+                      value={requestForm.appliance}
+                      onChange={(e) => setRequestForm({...requestForm, appliance: e.target.value})}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-primary-500"
+                    >
+                      <option value="">Select Appliance</option>
+                      {applianceTypes.map(app => (
+                        <option key={app.id} value={app.name}>{app.name}</option>
+                      ))}
+                    </select>
+                    <textarea
+                      value={requestForm.problem}
+                      onChange={(e) => setRequestForm({...requestForm, problem: e.target.value})}
+                      placeholder="Describe the problem"
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-primary-500"
+                      rows={3}
+                    />
+                    <button 
+                      onClick={() => {
+                        submitEstimateRequest({
+                          customer: user?.name,
+                          technician: selectedTech.name,
+                          appliance: requestForm.appliance,
+                          problem: requestForm.problem
+                        });
+                        setRequestSubmitted(true);
+                      }}
+                      disabled={!requestForm.appliance || !requestForm.problem}
+                      className="w-full py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      Request Estimate
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-center py-8 bg-green-50 rounded-xl border border-green-100">
+                    <h3 className="text-lg font-bold text-green-800 mb-2">Request Submitted!</h3>
+                    <p className="text-green-700">Wait for the technician to send you an estimate.</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>

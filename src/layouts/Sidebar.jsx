@@ -21,7 +21,8 @@ import {
   Cog,
   BarChart3,
   FileText as FileTextIcon,
-  ShieldAlert
+  ShieldAlert,
+  PesoSign
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { clsx } from 'clsx';
@@ -48,6 +49,7 @@ const Sidebar = () => {
       { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
       { icon: HelpCircle, label: 'Troubleshooting Guide', path: '/troubleshooting' },
       { icon: PlusCircle, label: 'Request Repair', path: '/request' },
+      { icon: PesoSign, label: 'My Estimates', path: '/customer-estimates' },
       { icon: TrendingUp, label: 'Progress Tracking', path: '/progress' },
       { icon: Wrench, label: 'My Appliances', path: '/appliances' },
       { icon: Ticket, label: 'Support Tickets', path: '/tickets' },
@@ -55,6 +57,7 @@ const Sidebar = () => {
     ],
     technician: [
       { icon: LayoutDashboard, label: 'Job Dashboard', path: '/dashboard' },
+      { icon: PesoSign, label: 'Estimate Requests', path: '/tech-estimates' },
       { icon: Activity, label: 'My Jobs', path: '/tech-progress' },
       { icon: ClipboardList, label: 'Active Jobs', path: '/jobs' },
       { icon: MessageSquare, label: 'Messages', path: '/messages' },

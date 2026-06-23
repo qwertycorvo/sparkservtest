@@ -117,6 +117,33 @@ export const DataProvider = ({ children }) => {
     },
   ]);
 
+  // Estimate Requests
+  const [estimateRequests, setEstimateRequests] = useState([
+    {
+      id: 'EST-1001',
+      customer: 'Jane Customer',
+      technician: 'Juan Dela Cruz',
+      appliance: 'Air Conditioner',
+      problem: 'Not cooling',
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    }
+  ]);
+
+  // Estimates
+  const [estimates, setEstimates] = useState([
+    {
+      id: 'ESTIMATE-1001',
+      requestId: 'EST-1001',
+      customer: 'Jane Customer',
+      technician: 'Juan Dela Cruz',
+      amount: '₱1,500',
+      description: 'Aircon cleaning plus parts replacement (capacitor)',
+      status: 'sent',
+      createdAt: new Date().toISOString(),
+    }
+  ]);
+
   // Rule-based technician matching function
   const matchTechnicians = (applianceName) => {
     return technicians
@@ -150,6 +177,57 @@ export const DataProvider = ({ children }) => {
     return newRequest;
   };
 
+  const submitEstimateRequest = (requestData) => {
+    const newRequest = {
+      id: `EST-${1000 + estimateRequests.length + 1}`,
+      ...requestData,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
+    setEstimateRequests([...estimateRequests, newRequest]);
+    return newRequest;
+  };
+
+  const sendEstimate = (estimateData) => {
+    const newEstimate = {
+      id: `ESTIMATE-${1000 + estimates.length + 1}`,
+      ...estimateData,
+      status: 'sent',
+      createdAt: new Date().toISOString(),
+    };
+    // Update request status
+    setEstimateRequests(estimateRequests.map(req => 
+      req.id === estimateData.requestId ? { ...req, status: 'estimated' } : req
+    ));
+    setEstimates([...estimates, newEstimate]);
+    return newEstimate;
+  };
+
+  const acceptEstimate = (estimateId) => {
+    setEstimates(estimates.map(est => 
+      est.id === estimateId ? { ...est, status: 'accepted' } : est
+    ));
+    // Find the estimate
+    const estimate = estimates.find(e => e.id === estimateId);
+    if (estimate) {
+      setEstimateRequests(estimateRequests.map(req => 
+        req.id === estimate.requestId ? { ...req, status: 'accepted' } : req
+      ));
+    }
+  };
+
+  const declineEstimate = (estimateId) => {
+    setEstimates(estimates.map(est => 
+      est.id === estimateId ? { ...est, status: 'declined' } : est
+    ));
+    const estimate = estimates.find(e => e.id === estimateId);
+    if (estimate) {
+      setEstimateRequests(estimateRequests.map(req => 
+        req.id === estimate.requestId ? { ...req, status: 'declined' } : req
+      ));
+    }
+  };
+
   const confirmPayment = (txnId) => {
     setTransactions(transactions.map(txn => 
       txn.id === txnId ? { ...txn, status: 'confirmed' } : txn
@@ -165,8 +243,14 @@ export const DataProvider = ({ children }) => {
         technicians,
         repairRequests,
         transactions,
+        estimateRequests,
+        estimates,
         matchTechnicians,
         submitRepairRequest,
+        submitEstimateRequest,
+        sendEstimate,
+        acceptEstimate,
+        declineEstimate,
         confirmPayment,
       }}
     >
