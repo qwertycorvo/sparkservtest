@@ -1,7 +1,7 @@
 import React from 'react';
 import { useData } from '../context/DataContext';
 import { useAuth } from '../context/AuthContext';
-import { CheckCircle2, XCircle, Clock, PesoSign } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, Coins } from 'lucide-react';
 
 const CustomerEstimates = () => {
   const { user } = useAuth();
@@ -37,7 +37,7 @@ const CustomerEstimates = () => {
         </div>
         <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
           <div className="flex items-center justify-between mb-4">
-            <PesoSign className="h-6 w-6 text-primary-500" />
+            <Coins className="h-6 w-6 text-primary-500" />
           </div>
           <p className="text-sm font-medium text-slate-500">Estimates Received</p>
           <p className="text-2xl font-bold text-slate-900">{myEstimates.length}</p>
