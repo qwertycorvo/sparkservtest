@@ -1,170 +1,177 @@
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { useAuth } from '../context/AuthContext';
-import { Send, CheckCircle2, Clock, Coins } from 'lucide-react';
+import { Send, ArrowLeft, Camera, MapPin, Video, Mail, ChevronLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const TechnicianEstimates = () => {
   const { user } = useAuth();
   const { estimateRequests, sendEstimate, estimates } = useData();
-
-  // Filter requests for current technician
-  const myRequests = estimateRequests.filter(req => req.technician === user?.name);
-  const myEstimates = estimates.filter(est => est.technician === user?.name);
-
   const [selectedRequest, setSelectedRequest] = useState(null);
-  const [estimateForm, setEstimateForm] = useState({ amount: '', description: '' });
+  const [estimateForm, setEstimateForm] = useState({ labor: '', parts: '', serviceFee: '', description: '', duration: '' });
+  const navigate = useNavigate();
 
-  const handleSendEstimate = (requestId) => {
+  const myRequests = estimateRequests.filter(req => req.technician === user?.name);
+
+  const handleSendEstimate = () => {
+    if (!selectedRequest) return;
+    const totalAmount = (parseFloat(estimateForm.labor) || 0) + (parseFloat(estimateForm.parts) || 0) + (parseFloat(estimateForm.serviceFee) || 0);
     sendEstimate({
-      requestId: requestId,
+      requestId: selectedRequest.id,
       customer: selectedRequest.customer,
       technician: user?.name,
-      amount: estimateForm.amount,
-      description: estimateForm.description
+      amount: `₱${totalAmount.toLocaleString()}`,
+      description: estimateForm.description,
     });
     setSelectedRequest(null);
-    setEstimateForm({ amount: '', description: '' });
-  };
-
-  const statusColors = {
-    'pending': 'bg-yellow-100 text-yellow-700',
-    'estimated': 'bg-blue-100 text-blue-700',
-    'accepted': 'bg-green-100 text-green-700',
-    'declined': 'bg-red-100 text-red-700'
+    setEstimateForm({ labor: '', parts: '', serviceFee: '', description: '', duration: '' });
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">Estimate Requests</h1>
-          <p className="text-slate-500 mt-2">View and respond to customer estimate requests</p>
-        </div>
-      </div>
+    <div className="max-w-md mx-auto">
+      {selectedRequest ? (
+        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+          {/* Header */}
+          <div className="bg-primary-600 text-white p-4 flex items-center justify-between">
+            <button onClick={() => setSelectedRequest(null)} className="p-1">
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <h3 className="font-semibold">REVIEW REQUEST #{selectedRequest.id}</h3>
+            <div></div>
+          </div>
 
-      {/* Overview Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <Clock className="h-6 w-6 text-slate-400" />
-          </div>
-          <p className="text-sm font-medium text-slate-500">Pending Requests</p>
-          <p className="text-2xl font-bold text-slate-900">{myRequests.filter(r => r.status === 'pending').length}</p>
-        </div>
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <Send className="h-6 w-6 text-primary-500" />
-          </div>
-          <p className="text-sm font-medium text-slate-500">Estimates Sent</p>
-          <p className="text-2xl font-bold text-slate-900">{myEstimates.length}</p>
-        </div>
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <CheckCircle2 className="h-6 w-6 text-green-500" />
-          </div>
-          <p className="text-sm font-medium text-slate-500">Estimates Accepted</p>
-          <p className="text-2xl font-bold text-slate-900">{myEstimates.filter(e => e.status === 'accepted').length}</p>
-        </div>
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <Coins className="h-6 w-6 text-primary-500" />
-          </div>
-          <p className="text-sm font-medium text-slate-500">Total Estimated</p>
-          <p className="text-2xl font-bold text-slate-900">
-            {myEstimates.length > 0 ? '₱' + myEstimates.reduce((sum, e) => {
-              const num = parseFloat(e.amount.replace(/[^0-9.-]+/g, ''));
-              return sum + (isNaN(num) ? 0 : num);
-            }, 0).toLocaleString() : '₱0'}
-          </p>
-        </div>
-      </div>
+          <div className="p-6 space-y-4">
+            {/* Customer & Location */}
+            <div className="space-y-2">
+              <p className="text-sm font-bold">{selectedRequest.customer}</p>
+              <div className="flex items-center gap-2 text-xs text-slate-500">
+                <MapPin className="h-3 w-3" />
+                <span>Manila Fortich, Philippines</span>
+              </div>
+            </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Request List */}
-        <div className="lg:col-span-2 space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">Requests</h2>
+            {/* Status */}
+            <div className="bg-yellow-50 border border-yellow-100 rounded-xl p-3">
+              <p className="text-xs font-semibold text-yellow-700 uppercase">Pending Estimate</p>
+            </div>
+
+            {/* Photo Preview Placeholders */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="aspect-square bg-slate-100 rounded-xl flex items-center justify-center">
+                <Camera className="h-8 w-8 text-slate-300" />
+              </div>
+              <div className="aspect-square bg-slate-100 rounded-xl flex items-center justify-center">
+                <Camera className="h-8 w-8 text-slate-300" />
+              </div>
+            </div>
+
+            {/* Estimate Form */}
+            <div className="space-y-4 pt-4 border-t border-slate-100">
+              <h4 className="font-semibold text-sm uppercase text-slate-700">Estimated Cost Breakdown</h4>
+              
+              <div className="grid grid-cols-3 gap-2">
+                <div>
+                  <label className="text-xs text-slate-500">Labor</label>
+                  <input
+                    type="number"
+                    placeholder="₱0"
+                    value={estimateForm.labor}
+                    onChange={(e) => setEstimateForm({...estimateForm, labor: e.target.value})}
+                    className="w-full p-2 border border-slate-200 rounded-lg text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-500">Parts</label>
+                  <input
+                    type="number"
+                    placeholder="₱0"
+                    value={estimateForm.parts}
+                    onChange={(e) => setEstimateForm({...estimateForm, parts: e.target.value})}
+                    className="w-full p-2 border border-slate-200 rounded-lg text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-slate-500">Service Fee</label>
+                  <input
+                    type="number"
+                    placeholder="₱0"
+                    value={estimateForm.serviceFee}
+                    onChange={(e) => setEstimateForm({...estimateForm, serviceFee: e.target.value})}
+                    className="w-full p-2 border border-slate-200 rounded-lg text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <label className="text-xs text-slate-500">Notes</label>
+                <textarea
+                  placeholder="Needs new waterline and filter. Estimated repair time: 2 hours."
+                  value={estimateForm.description}
+                  onChange={(e) => setEstimateForm({...estimateForm, description: e.target.value})}
+                  className="w-full p-2 border border-slate-200 rounded-lg text-sm"
+                  rows="3"
+                />
+              </div>
+
+              {/* Total */}
+              <div className="bg-slate-50 rounded-xl p-4">
+                <div className="flex items-center justify-between text-sm">
+                  <span className="font-semibold">Total Estimated Cost</span>
+                  <span className="text-xl font-bold text-primary-600">
+                    ₱{((parseFloat(estimateForm.labor) || 0) + (parseFloat(estimateForm.parts) || 0) + (parseFloat(estimateForm.serviceFee) || 0)).toLocaleString()}
+                  </span>
+                </div>
+                <div className="text-xs text-slate-500 mt-2">
+                  <p>Validity Period</p>
+                  <p className="font-semibold">3 days</p>
+                </div>
+              </div>
+
+              <button
+                onClick={handleSendEstimate}
+                className="w-full bg-green-600 text-white py-3 rounded-xl font-bold"
+              >
+                SEND ESTIMATE
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-slate-900">Estimate Requests</h1>
+          </div>
+
           {myRequests.length === 0 ? (
-            <div className="bg-white p-12 rounded-3xl border border-slate-100 text-center">
+            <div className="bg-white p-8 rounded-2xl border border-slate-100 text-center">
               <p className="text-slate-500">No estimate requests yet.</p>
             </div>
           ) : (
-            myRequests.map(request => (
-              <div 
-                key={request.id} 
-                className={`bg-white p-6 rounded-3xl border border-slate-100 shadow-sm cursor-pointer transition-all hover:shadow-md ${selectedRequest?.id === request.id ? 'ring-2 ring-primary-500' : ''}`}
-                onClick={() => setSelectedRequest(request)}
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-bold text-slate-900">{request.customer}</h3>
-                      <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${statusColors[request.status]}`}>
-                        {request.status}
+            <div className="space-y-4">
+              {myRequests.map(request => {
+                const hasEstimate = estimates.find(e => e.requestId === request.id);
+                return (
+                  <div
+                    key={request.id}
+                    onClick={() => !hasEstimate && setSelectedRequest(request)}
+                    className={`bg-white rounded-2xl p-6 border border-slate-100 ${!hasEstimate ? 'cursor-pointer hover:border-primary-500' : 'opacity-60'}`}
+                  >
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <h3 className="font-bold text-slate-900">{request.customer}</h3>
+                        <p className="text-sm text-slate-500">{request.appliance} - {request.problem}</p>
+                      </div>
+                      <span className={`text-xs px-2 py-1 rounded-full font-semibold ${hasEstimate ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                        {hasEstimate ? 'Estimate Sent' : 'Pending'}
                       </span>
                     </div>
-                    <p className="text-sm font-semibold text-slate-700">{request.appliance}</p>
-                    <p className="text-sm text-slate-500 mt-1">{request.problem}</p>
                   </div>
-                </div>
-              </div>
-            ))
-          )}
-        </div>
-
-        {/* Estimate Form */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-slate-900">Send Estimate</h2>
-          {selectedRequest ? (
-            <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-              <h3 className="font-bold text-slate-900 mb-4">{selectedRequest.customer}</h3>
-              <p className="text-sm text-slate-600 mb-4">
-                <span className="font-semibold">Appliance:</span> {selectedRequest.appliance}<br />
-                <span className="font-semibold">Problem:</span> {selectedRequest.problem}
-              </p>
-              {selectedRequest.status === 'pending' ? (
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Estimated Amount</label>
-                    <input
-                      type="text"
-                      placeholder="₱0.00"
-                      value={estimateForm.amount}
-                      onChange={(e) => setEstimateForm({ ...estimateForm, amount: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-primary-500"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Description</label>
-                    <textarea
-                      placeholder="Description of the work to be done"
-                      value={estimateForm.description}
-                      onChange={(e) => setEstimateForm({ ...estimateForm, description: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-primary-500"
-                      rows={4}
-                    />
-                  </div>
-                  <button
-                    onClick={() => handleSendEstimate(selectedRequest.id)}
-                    disabled={!estimateForm.amount || !estimateForm.description}
-                    className="w-full bg-primary-600 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    <Send className="h-4 w-4" />
-                    Send Estimate
-                  </button>
-                </div>
-              ) : (
-                <div className="text-center py-8">
-                  <p className="text-slate-500">Estimate already sent for this request.</p>
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="bg-white p-12 rounded-3xl border border-slate-100 text-center">
-              <p className="text-slate-500">Select a request to send an estimate.</p>
+                );
+              })}
             </div>
           )}
         </div>
-      </div>
+      )}
     </div>
   );
 };

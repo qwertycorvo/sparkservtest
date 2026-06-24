@@ -570,48 +570,15 @@ const TroubleshootingGuide = () => {
                   return null;
                 })()}
 
-                {!requestSubmitted ? (
-                  <div className="space-y-4">
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">Request an Estimate</h3>
-                    <select
-                      value={requestForm.appliance}
-                      onChange={(e) => setRequestForm({...requestForm, appliance: e.target.value})}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-primary-500"
-                    >
-                      <option value="">Select Appliance</option>
-                      {applianceTypes.map(app => (
-                        <option key={app.id} value={app.name}>{app.name}</option>
-                      ))}
-                    </select>
-                    <textarea
-                      value={requestForm.problem}
-                      onChange={(e) => setRequestForm({...requestForm, problem: e.target.value})}
-                      placeholder="Describe the problem"
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:border-primary-500"
-                      rows={3}
-                    />
-                    <button 
-                      onClick={() => {
-                        submitEstimateRequest({
-                          customer: user?.name,
-                          technician: selectedTech.name,
-                          appliance: requestForm.appliance,
-                          problem: requestForm.problem
-                        });
-                        setRequestSubmitted(true);
-                      }}
-                      disabled={!requestForm.appliance || !requestForm.problem}
-                      className="w-full py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      Request Estimate
-                    </button>
-                  </div>
-                ) : (
-                  <div className="text-center py-8 bg-green-50 rounded-xl border border-green-100">
-                    <h3 className="text-lg font-bold text-green-800 mb-2">Request Submitted!</h3>
-                    <p className="text-green-700">Wait for the technician to send you an estimate.</p>
-                  </div>
-                )}
+                <button 
+                  onClick={() => {
+                    navigate(`/request-estimate/${selectedTech.id}`);
+                    setModalOpen(false);
+                  }}
+                  className="w-full py-3 rounded-xl bg-primary-600 text-white font-bold hover:bg-primary-700 transition-all"
+                >
+                  Request Estimate
+                </button>
               </div>
             </div>
           </div>

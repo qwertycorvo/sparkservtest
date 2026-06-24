@@ -21,6 +21,7 @@ import SupportTickets from './pages/SupportTickets';
 import TroubleshootingGuide from './pages/TroubleshootingGuide';
 import CustomerEstimates from './pages/CustomerEstimates';
 import TechnicianEstimates from './pages/TechnicianEstimates';
+import EstimateRequestForm from './pages/EstimateRequestForm';
 
 // Mock components for other routes
 const Placeholder = ({ title }) => (
@@ -59,6 +60,7 @@ function App() {
               <Route path="/settings" element={<Placeholder title="System Settings" />} />
               <Route path="/customer-estimates" element={<CustomerEstimates />} />
               <Route path="/tech-estimates" element={<TechnicianEstimates />} />
+              <Route path="/request-estimate/:techId?" element={<EstimateRequestForm />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" replace />} />

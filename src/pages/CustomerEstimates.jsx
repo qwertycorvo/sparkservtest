@@ -1,119 +1,146 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { useAuth } from '../context/AuthContext';
-import { CheckCircle2, XCircle, Clock, Coins } from 'lucide-react';
+import { CheckCircle2, XCircle, ChevronDown, Camera, MapPin, Video, Mail } from 'lucide-react';
 
 const CustomerEstimates = () => {
   const { user } = useAuth();
   const { estimateRequests, estimates, acceptEstimate, declineEstimate } = useData();
+  const [showBreakdown, setShowBreakdown] = useState(false);
 
   const myRequests = estimateRequests.filter(req => req.customer === user?.name);
-  const myEstimates = estimates.filter(est => est.customer === user?.name);
-
-  const statusColors = {
-    'pending': 'bg-yellow-100 text-yellow-700',
-    'estimated': 'bg-blue-100 text-blue-700',
-    'accepted': 'bg-green-100 text-green-700',
-    'declined': 'bg-red-100 text-red-700'
-  };
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-md mx-auto space-y-6">
       <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900">My Estimates</h1>
-          <p className="text-slate-500 mt-2">View and respond to estimates from technicians</p>
-        </div>
+        <h1 className="text-2xl font-bold text-slate-900">My Estimates</h1>
       </div>
 
-      {/* Overview Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <Clock className="h-6 w-6 text-slate-400" />
-          </div>
-          <p className="text-sm font-medium text-slate-500">Pending Estimates</p>
-          <p className="text-2xl font-bold text-slate-900">{myRequests.filter(r => r.status === 'pending').length}</p>
+      {myRequests.length === 0 ? (
+        <div className="bg-white p-8 rounded-2xl border border-slate-100 text-center">
+          <p className="text-slate-500">No estimate requests yet.</p>
         </div>
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <Coins className="h-6 w-6 text-primary-500" />
-          </div>
-          <p className="text-sm font-medium text-slate-500">Estimates Received</p>
-          <p className="text-2xl font-bold text-slate-900">{myEstimates.length}</p>
-        </div>
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <CheckCircle2 className="h-6 w-6 text-green-500" />
-          </div>
-          <p className="text-sm font-medium text-slate-500">Accepted</p>
-          <p className="text-2xl font-bold text-slate-900">{myEstimates.filter(e => e.status === 'accepted').length}</p>
-        </div>
-        <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <XCircle className="h-6 w-6 text-red-500" />
-          </div>
-          <p className="text-sm font-medium text-slate-500">Declined</p>
-          <p className="text-2xl font-bold text-slate-900">{myEstimates.filter(e => e.status === 'declined').length}</p>
-        </div>
-      </div>
+      ) : (
+        myRequests.map((request) => {
+          const estimate = estimates.find(e => e.requestId === request.id);
 
-      {/* Estimate Cards */}
-      <div className="space-y-4">
-        {myRequests.length === 0 ? (
-          <div className="bg-white p-12 rounded-3xl border border-slate-100 text-center">
-            <p className="text-slate-500">No estimate requests yet.</p>
-          </div>
-        ) : (
-          myRequests.map(request => {
-            const estimate = myEstimates.find(e => e.requestId === request.id);
-            return (
-              <div key={request.id} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-lg font-bold text-slate-900">{request.technician}</h3>
-                    <p className="text-sm text-slate-600">
-                      {request.appliance} - {request.problem}
-                    </p>
+          return (
+            <div key={request.id} className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
+              {/* Header (for estimate) */}
+              {estimate && (
+                <div className="bg-primary-600 text-white p-4">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-semibold">Your Repair Estimate</h3>
+                    <div className="bg-green-500 text-white text-xs px-3 py-1 rounded-full">
+                      Estimate Sent - Awaiting Approval
+                    </div>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${statusColors[request.status]}`}>
-                    {request.status}
-                  </span>
                 </div>
+              )}
 
+              <div className="p-6 space-y-4">
+                {/* Estimate Display */}
                 {estimate && (
-                  <div className="mb-4 p-4 bg-slate-50 rounded-xl border border-slate-100">
-                    <h4 className="font-bold text-slate-900 mb-2">Estimate Details:</h4>
-                    <p className="text-3xl font-bold text-primary-600 mb-2">{estimate.amount}</p>
-                    <p className="text-slate-600">{estimate.description}</p>
-                  </div>
+                  <>
+                    <div className="bg-green-100 text-green-800 rounded-2xl p-6 text-center">
+                      <p className="text-sm mb-2">Total Cost</p>
+                      <p className="text-4xl font-bold">{estimate.amount}</p>
+                      <button
+                        onClick={() => setShowBreakdown(!showBreakdown)}
+                        className="mt-4 text-sm text-green-700 font-medium flex items-center justify-center gap-1"
+                      >
+                        VIEW BREAKDOWN
+                        <ChevronDown className={`h-4 w-4 transition-transform ${showBreakdown ? 'rotate-180' : ''}`} />
+                      </button>
+                    </div>
+
+                    {showBreakdown && (
+                      <div className="space-y-3 text-sm">
+                        <h4 className="font-semibold text-slate-900">Estimated Cost Breakdown</h4>
+                        <div className="grid grid-cols-3 gap-2">
+                          <div className="p-3 bg-slate-50 rounded-xl text-center">
+                            <p className="text-xs text-slate-500">Labor</p>
+                            <p className="font-bold">₱1200</p>
+                          </div>
+                          <div className="p-3 bg-slate-50 rounded-xl text-center">
+                            <p className="text-xs text-slate-500">Parts</p>
+                            <p className="font-bold">₱3500</p>
+                          </div>
+                          <div className="p-3 bg-slate-50 rounded-xl text-center">
+                            <p className="text-xs text-slate-500">Service Fee</p>
+                            <p className="font-bold">₱500</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="border-t border-slate-100 pt-4 space-y-3">
+                      <div>
+                        <p className="text-xs text-slate-500 uppercase">Problem Confirmed</p>
+                        <p className="text-sm font-semibold">{request.problem}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <p className="text-xs text-slate-500 uppercase">Est. Duration</p>
+                        <p className="text-sm font-semibold">2 hours</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3 pt-2">
+                      {estimate.status === 'sent' && (
+                        <>
+                          <button
+                            onClick={() => acceptEstimate(estimate.id)}
+                            className="w-full py-3 bg-green-600 text-white rounded-xl font-bold flex items-center justify-center gap-2"
+                          >
+                            <CheckCircle2 className="h-4 w-4" />
+                            ACCEPT ESTIMATE
+                          </button>
+                          <button
+                            onClick={() => { }}
+                            className="w-full py-3 border border-slate-300 text-slate-700 rounded-xl font-bold"
+                          >
+                            ASK REVISION
+                          </button>
+                          <button
+                            onClick={() => declineEstimate(estimate.id)}
+                            className="w-full py-3 border border-red-500 text-red-500 rounded-xl font-bold"
+                          >
+                            REJECT
+                          </button>
+                        </>
+                      )}
+
+                      {estimate.status === 'accepted' && (
+                        <div className="text-center py-4 bg-green-50 rounded-xl">
+                          <CheckCircle2 className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                          <p className="font-bold text-green-700">Estimate Accepted</p>
+                        </div>
+                      )}
+
+                      {estimate.status === 'declined' && (
+                        <div className="text-center py-4 bg-red-50 rounded-xl">
+                          <XCircle className="h-8 w-8 text-red-600 mx-auto mb-2" />
+                          <p className="font-bold text-red-700">Estimate Declined</p>
+                        </div>
+                      )}
+                    </div>
+                  </>
                 )}
 
-                {estimate && estimate.status === 'sent' && (
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => acceptEstimate(estimate.id)}
-                      className="flex-1 bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all"
-                    >
-                      Accept & Book
-                    </button>
-                    <button
-                      onClick={() => declineEstimate(estimate.id)}
-                      className="flex-1 bg-red-600 text-white py-3 rounded-xl font-bold hover:bg-red-700 transition-all"
-                    >
-                      Decline
-                    </button>
-                  </div>
-                )}
-
+                {/* Pending Request Display */}
                 {!estimate && (
-                  <p className="text-center text-slate-500 py-4">Waiting for technician to send an estimate...</p>
+                  <div className="text-center py-8">
+                    <div className="mb-4">
+                      <p className="text-sm text-yellow-600 font-semibold uppercase">Pending Estimate</p>
+                    </div>
+                    <p className="text-slate-500">Waiting for technician to send an estimate...</p>
+                  </div>
                 )}
               </div>
-            );
-          })
-        )}
-      </div>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 };
