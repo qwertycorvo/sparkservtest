@@ -18,10 +18,11 @@ import AdminProgressTracking from './pages/AdminProgressTracking';
 import TechnicianProgressTracking from './pages/TechnicianProgressTracking';
 import Payments from './pages/Payments';
 import SupportTickets from './pages/SupportTickets';
-import TroubleshootingGuide from './pages/TroubleshootingGuide';
+import ServiceInquiry from './pages/SmartRepairAssistant';
 import CustomerEstimates from './pages/CustomerEstimates';
 import TechnicianEstimates from './pages/TechnicianEstimates';
 import EstimateRequestForm from './pages/EstimateRequestForm';
+import AIInsights from './pages/AIInsights';
 
 // Mock components for other routes
 const Placeholder = ({ title }) => (
@@ -56,9 +57,13 @@ function App() {
               <Route path="/tickets" element={<SupportTickets />} />
               <Route path="/messages" element={<Placeholder title="Messages" />} />
               <Route path="/navigation" element={<JobTracking />} />
-              <Route path="/troubleshooting" element={<TroubleshootingGuide />} />
+              <Route path="/troubleshooting" element={<ServiceInquiry />} />
+              <Route path="/smart-repair" element={<ServiceInquiry />} />
+              <Route path="/service-inquiry" element={<ServiceInquiry />} />
               <Route path="/settings" element={<Placeholder title="System Settings" />} />
               <Route path="/customer-estimates" element={<CustomerEstimates />} />
+              <Route path="/ai-inquiry" element={<ServiceInquiry />} />
+              <Route path="/ai-insights" element={<AIInsights />} />
               <Route path="/tech-estimates" element={<TechnicianEstimates />} />
               <Route path="/request-estimate/:techId?" element={<EstimateRequestForm />} />
             </Route>

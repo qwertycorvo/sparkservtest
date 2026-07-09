@@ -22,7 +22,9 @@ import {
   BarChart3,
   FileText as FileTextIcon,
   ShieldAlert,
-  Coins
+  Coins,
+  Bot,
+  Brain
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { clsx } from 'clsx';
@@ -38,6 +40,7 @@ const Sidebar = () => {
   const menuItems = {
     admin: [
       { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+      { icon: Brain, label: 'AI Insights', path: '/ai-insights' },
       { icon: Activity, label: 'Progress Management', path: '/admin-progress' },
       { icon: Eye, label: 'Job Monitoring', path: '/job-monitoring' },
       { icon: Users, label: 'User Management', path: '/users' },
@@ -47,7 +50,7 @@ const Sidebar = () => {
     ],
     customer: [
       { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-      { icon: HelpCircle, label: 'Troubleshooting Guide', path: '/troubleshooting' },
+      { icon: Bot, label: 'Service Inquiry', path: '/service-inquiry' },
       { icon: PlusCircle, label: 'Request Repair', path: '/request' },
       { icon: Coins, label: 'My Estimates', path: '/customer-estimates' },
       { icon: TrendingUp, label: 'Progress Tracking', path: '/progress' },
