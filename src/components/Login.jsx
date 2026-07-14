@@ -66,11 +66,6 @@ const Login = () => {
                 <span className="text-3xl font-bold">20</span>
                 <span className="text-sm text-primary-200/60 uppercase tracking-wider">Technicians</span>
               </div>
-              <div className="h-12 w-px bg-white/10"></div>
-              <div className="flex flex-col gap-1">
-                <span className="text-3xl font-bold">196</span>
-                <span className="text-sm text-primary-200/60 uppercase tracking-wider">Repairs Done</span>
-              </div>
             </div>
           </div>
           
