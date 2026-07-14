@@ -12,10 +12,12 @@ import {
   Briefcase
 } from 'lucide-react';
 import { useData } from '../context/DataContext';
+import { useAuth } from '../context/AuthContext';
 
 const Inquiry = () => {
   const [activeTab, setActiveTab] = useState('issue');
-  const { matchTechnicians, technicians } = useData();
+  const { matchTechnicians, technicians, submitInquiry } = useData();
+  const { user } = useAuth();
 
   const tabs = [
     { id: 'issue', label: 'Ask About Issue', icon: Wrench },
@@ -36,6 +38,39 @@ const Inquiry = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    let inquiryDetails = {};
+    if (activeTab === 'issue') {
+      inquiryDetails = {
+        type: 'issue',
+        appliance: formData.appliance,
+        details: formData.issue
+      };
+    } else if (activeTab === 'cost') {
+      inquiryDetails = {
+        type: 'cost',
+        appliance: formData.appliance,
+        details: formData.issue
+      };
+    } else if (activeTab === 'availability') {
+      inquiryDetails = {
+        type: 'availability',
+        appliance: formData.appliance,
+        details: `Preferred date: ${formData.preferredDate}, preferred time: ${formData.preferredTime}`
+      };
+    } else if (activeTab === 'clarify') {
+      inquiryDetails = {
+        type: 'clarify',
+        appliance: formData.appliance,
+        details: formData.message
+      };
+    }
+
+    submitInquiry({
+      customer: user?.name || 'Guest',
+      ...inquiryDetails
+    });
+
     setInquirySent(true);
     setTimeout(() => setInquirySent(false), 5000);
   };

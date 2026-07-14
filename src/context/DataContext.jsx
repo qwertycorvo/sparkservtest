@@ -144,6 +144,19 @@ export const DataProvider = ({ children }) => {
     }
   ]);
 
+  // Inquiries
+  const [inquiries, setInquiries] = useState([
+    {
+      id: 'INQ-1001',
+      customer: 'Jane Customer',
+      type: 'issue',
+      appliance: 'Air Conditioner',
+      details: 'AC not cooling',
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    }
+  ]);
+
   // --------------------------
   // SUPERADMIN-SPECIFIC DATA
   // --------------------------
@@ -275,6 +288,17 @@ export const DataProvider = ({ children }) => {
     ));
   };
 
+  const submitInquiry = (inquiryData) => {
+    const newInquiry = {
+      id: `INQ-${1000 + inquiries.length + 1}`,
+      ...inquiryData,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+    };
+    setInquiries([...inquiries, newInquiry]);
+    return newInquiry;
+  };
+
   // --------------------------
   // SUPERADMIN FUNCTIONS
   // --------------------------
@@ -369,6 +393,7 @@ export const DataProvider = ({ children }) => {
         transactions,
         estimateRequests,
         estimates,
+        inquiries,
         matchTechnicians,
         submitRepairRequest,
         submitEstimateRequest,
@@ -376,6 +401,7 @@ export const DataProvider = ({ children }) => {
         acceptEstimate,
         declineEstimate,
         confirmPayment,
+        submitInquiry,
         // Superadmin
         users, setUsers,
         roles, setRoles,
