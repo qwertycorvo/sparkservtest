@@ -20,8 +20,8 @@ import {
   UserCog,
   Cog,
   BarChart3,
-  FileText as FileTextIcon,
-  ShieldAlert,
+  FileText,
+  ShieldCheck,
   Coins
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -63,15 +63,17 @@ const Sidebar = () => {
       { icon: MessageSquare, label: 'Messages', path: '/messages' },
       { icon: MapPin, label: 'Navigation', path: '/navigation' },
     ],
-    system_admin: [
+    superadmin: [
       { icon: LayoutDashboard, label: 'System Dashboard', path: '/dashboard' },
       { icon: Users, label: 'User Management', path: '/users' },
+      { icon: ShieldCheck, label: 'Role Management', path: '/role-management' },
       { icon: Activity, label: 'Progress Management', path: '/admin-progress' },
       { icon: Eye, label: 'Job Monitoring', path: '/job-monitoring' },
       { icon: ClipboardList, label: 'Booking Review', path: '/bookings' },
       { icon: Ticket, label: 'Support Tickets', path: '/tickets' },
       { icon: CreditCard, label: 'Transactions', path: '/payments' },
-      { icon: Settings, label: 'System Settings', path: '/settings' },
+      { icon: Settings, label: 'System Config', path: '/system-config' },
+      { icon: FileText, label: 'System Logs', path: '/system-logs' },
     ]
   };
 

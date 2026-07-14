@@ -16,7 +16,7 @@ const Login = () => {
     { id: 'customer', name: 'Customer', icon: User, color: 'bg-blue-100 text-blue-600' },
     { id: 'technician', name: 'Technician', icon: Wrench, color: 'bg-orange-100 text-orange-600' },
     { id: 'admin', name: 'Admin', icon: UserCheck, color: 'bg-green-100 text-green-600' },
-    { id: 'system_admin', name: 'System Administrator', icon: Shield, color: 'bg-purple-100 text-purple-600' },
+    { id: 'superadmin', name: 'Superadmin', icon: Shield, color: 'bg-purple-100 text-purple-600' },
   ];
 
   const handleSubmit = (e) => {
@@ -119,7 +119,7 @@ const Login = () => {
                       {role.id === 'customer' && 'Request repairs and track progress'}
                       {role.id === 'technician' && 'Manage assigned jobs'}
                       {role.id === 'admin' && 'Review bookings and confirm payments'}
-                      {role.id === 'system_admin' && 'Full system control'}
+                      {role.id === 'superadmin' && 'Full system control'}
                     </p>
                   </div>
                   {selectedRole === role.id && (

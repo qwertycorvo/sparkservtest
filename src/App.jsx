@@ -21,6 +21,9 @@ import SupportTickets from './pages/SupportTickets';
 import CustomerEstimates from './pages/CustomerEstimates';
 import TechnicianEstimates from './pages/TechnicianEstimates';
 import EstimateRequestForm from './pages/EstimateRequestForm';
+import RoleManagement from './pages/RoleManagement';
+import SystemConfig from './pages/SystemConfig';
+import SystemLogs from './pages/SystemLogs';
 
 // Mock components for other routes
 const Placeholder = ({ title }) => (
@@ -43,6 +46,7 @@ function App() {
               <Route path="/job-monitoring" element={<JobMonitoring />} />
               <Route path="/appliances" element={<Appliances />} />
               <Route path="/users" element={<UserManagement />} />
+              <Route path="/role-management" element={<RoleManagement />} />
               <Route path="/jobs" element={<BookingReview />} />
               <Route path="/inquiry" element={<Inquiry />} />
               <Route path="/request" element={<RequestRepair />} />
@@ -56,6 +60,8 @@ function App() {
               <Route path="/messages" element={<Placeholder title="Messages" />} />
               <Route path="/navigation" element={<JobTracking />} />
               <Route path="/settings" element={<Placeholder title="System Settings" />} />
+              <Route path="/system-config" element={<SystemConfig />} />
+              <Route path="/system-logs" element={<SystemLogs />} />
               <Route path="/customer-estimates" element={<CustomerEstimates />} />
               <Route path="/tech-estimates" element={<TechnicianEstimates />} />
               <Route path="/request-estimate/:techId?" element={<EstimateRequestForm />} />

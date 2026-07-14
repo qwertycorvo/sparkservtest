@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from 'react';
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  // Roles: 'customer', 'technician', 'admin', 'system_admin'
+  // Roles: 'customer', 'technician', 'admin', 'superadmin'
   const [user, setUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem('sparkserv_user');
@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
       customer: 'Jane Customer',
       technician: 'John Technician',
       admin: 'Admin User',
-      system_admin: 'System Administrator'
+      superadmin: 'Superadmin'
     };
     const newUser = {
       id: 1,
