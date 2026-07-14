@@ -281,21 +281,6 @@ const ServiceInquiry = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-8">
-      <div className="rounded-[2rem] bg-gradient-to-r from-primary-700 to-slate-900 p-10 text-white shadow-xl shadow-slate-400/20">
-        <div className="grid gap-6 md:grid-cols-[auto_1fr] items-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/10 text-white shadow-lg shadow-black/10">
-            <Bot className="h-10 w-10" />
-          </div>
-          <div>
-            <p className="uppercase text-sm tracking-[0.3em] text-slate-200">Service Inquiry</p>
-            <h1 className="mt-4 text-4xl font-bold tracking-tight">Diagnose, troubleshoot, and book repairs in one seamless flow.</h1>
-            <p className="mt-3 max-w-2xl text-slate-200/90 leading-7">
-              Start by selecting your appliance and describing the issue. The assistant will provide a practical diagnosis, step-by-step fixes, and a booking path only when needed.
-            </p>
-          </div>
-        </div>
-      </div>
-
       <div className="grid gap-8 lg:grid-cols-[1.25fr_0.85fr]">
         <section className="space-y-6 rounded-[2rem] bg-white p-8 shadow-sm border border-slate-200">
           <div className="flex items-center gap-3 text-slate-900">
@@ -358,16 +343,6 @@ const ServiceInquiry = () => {
               </button>
             </div>
           </form>
-
-          <div className="rounded-[2rem] bg-slate-50 p-6 border border-slate-100">
-            <div className="mb-4 flex items-center gap-3 text-slate-900">
-              <ShieldCheck className="h-5 w-5 text-primary-600" />
-              <h3 className="text-lg font-semibold">Professional guidance, no backend required</h3>
-            </div>
-            <p className="text-slate-600 leading-7">
-              This assistant uses mock intelligence and curated repair data to provide realistic diagnosis, troubleshooting steps, and transparent booking logic for your capstone presentation.
-            </p>
-          </div>
         </section>
 
         <aside className="space-y-6">
@@ -390,16 +365,6 @@ const ServiceInquiry = () => {
                 Provide realistic cost estimates to set expectations before the technician visit.
               </li>
             </ul>
-          </div>
-
-          <div className="rounded-[2rem] bg-primary-600 p-6 text-white shadow-xl shadow-primary-500/20">
-            <div className="flex items-center gap-3 mb-4">
-              <Sparkles className="h-5 w-5" />
-              <h3 className="text-lg font-semibold">Service inquiry in one workflow</h3>
-            </div>
-            <p className="text-slate-100 leading-7">
-              Diagnose the issue, follow troubleshooting guidance, get a cost summary, and book a technician only when needed — all from a polished assistant page.
-            </p>
           </div>
         </aside>
       </div>
