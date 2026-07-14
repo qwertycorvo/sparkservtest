@@ -166,25 +166,25 @@ const issueLibrary = [
 
 const costProfiles = {
   minor: {
-    diagnosisFee: 39,
-    laborMin: 60,
-    laborMax: 90,
-    partsMin: 20,
-    partsMax: 50,
+    diagnosisFee: 2200,
+    laborMin: 3400,
+    laborMax: 5100,
+    partsMin: 1100,
+    partsMax: 2800,
   },
   moderate: {
-    diagnosisFee: 49,
-    laborMin: 90,
-    laborMax: 140,
-    partsMin: 50,
-    partsMax: 120,
+    diagnosisFee: 2800,
+    laborMin: 5100,
+    laborMax: 8000,
+    partsMin: 2800,
+    partsMax: 6800,
   },
   major: {
-    diagnosisFee: 59,
-    laborMin: 120,
-    laborMax: 220,
-    partsMin: 80,
-    partsMax: 220,
+    diagnosisFee: 3400,
+    laborMin: 6800,
+    laborMax: 12500,
+    partsMin: 4500,
+    partsMax: 12500,
   },
 };
 
@@ -218,12 +218,26 @@ const analyzeIssue = (appliance, description) => {
   };
 };
 
-const costBadge = (label, value) => (
-  <div className="rounded-3xl bg-slate-50 p-4 border border-slate-100 shadow-sm">
-    <p className="text-sm text-slate-500">{label}</p>
-    <p className="text-xl font-semibold text-slate-900">${value}</p>
-  </div>
-);
+const costBadge = (label, value) => {
+  let displayValue;
+  if (typeof value === 'object' && value.min !== undefined && value.max !== undefined) {
+    // Handle range object
+    displayValue = `₱${value.min.toLocaleString()} - ₱${value.max.toLocaleString()}`;
+  } else if (typeof value === 'number') {
+    // Handle single number
+    displayValue = `₱${value.toLocaleString()}`;
+  } else {
+    // Fallback for other formats
+    displayValue = value;
+  }
+
+  return (
+    <div className="rounded-3xl bg-slate-50 p-4 border border-slate-100 shadow-sm">
+      <p className="text-sm text-slate-500">{label}</p>
+      <p className="text-xl font-semibold text-slate-900">{displayValue}</p>
+    </div>
+  );
+};
 
 const ServiceInquiry = () => {
   const [appliance, setAppliance] = useState('Washing Machine');
@@ -397,9 +411,9 @@ const ServiceInquiry = () => {
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 {costBadge('Diagnosis fee', analysis.costs.diagnosisFee)}
-                {costBadge('Labor range', `$${analysis.costs.laborMin} - $${analysis.costs.laborMax}`)}
-                {costBadge('Parts estimate', `$${analysis.costs.partsMin} - $${analysis.costs.partsMax}`)}
-                {costBadge('Estimated total', `$${analysis.costs.totalMin} - $${analysis.costs.totalMax}`)}
+                {costBadge('Labor range', { min: analysis.costs.laborMin, max: analysis.costs.laborMax })}
+                {costBadge('Parts estimate', { min: analysis.costs.partsMin, max: analysis.costs.partsMax })}
+                {costBadge('Estimated total', { min: analysis.costs.totalMin, max: analysis.costs.totalMax })}
               </div>
             </section>
           </div>
@@ -476,9 +490,9 @@ const ServiceInquiry = () => {
                 </div>
                 <div className="grid gap-4 md:grid-cols-4">
                   {costBadge('Diagnosis fee', analysis.costs.diagnosisFee)}
-                  {costBadge('Labor range', `$${analysis.costs.laborMin} - $${analysis.costs.laborMax}`)}
-                  {costBadge('Parts estimate', `$${analysis.costs.partsMin} - $${analysis.costs.partsMax}`)}
-                  {costBadge('Total range', `$${analysis.costs.totalMin} - $${analysis.costs.totalMax}`)}
+                  {costBadge('Labor range', { min: analysis.costs.laborMin, max: analysis.costs.laborMax })}
+                  {costBadge('Parts estimate', { min: analysis.costs.partsMin, max: analysis.costs.partsMax })}
+                  {costBadge('Total range', { min: analysis.costs.totalMin, max: analysis.costs.totalMax })}
                 </div>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <p className="text-slate-600 leading-7">
