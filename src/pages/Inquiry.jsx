@@ -6,11 +6,16 @@ import {
   MessageSquare, 
   Send, 
   CheckCircle2,
-  Info
+  Info,
+  Star,
+  User,
+  Briefcase
 } from 'lucide-react';
+import { useData } from '../context/DataContext';
 
 const Inquiry = () => {
   const [activeTab, setActiveTab] = useState('issue');
+  const { matchTechnicians, technicians } = useData();
 
   const tabs = [
     { id: 'issue', label: 'Ask About Issue', icon: Wrench },
@@ -283,6 +288,62 @@ const Inquiry = () => {
 
         {/* Sidebar */}
         <div className="space-y-6">
+          {/* Technician Recommender */}
+          <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
+            <h3 className="text-lg font-bold text-slate-900 mb-4">Recommended Technicians</h3>
+            
+            {formData.appliance ? (
+              <div className="space-y-4">
+                {matchTechnicians(formData.appliance).length > 0 ? (
+                  matchTechnicians(formData.appliance).map(tech => (
+                    <div key={tech.id} className="p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-primary-200 hover:bg-primary-50 transition-all">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center">
+                            <User className="h-5 w-5 text-primary-600" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-slate-900">{tech.name}</p>
+                            <p className="text-xs text-slate-500">{tech.area}</p>
+                          </div>
+                        </div>
+                        {tech.available && (
+                          <span className="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded-full">
+                            Available
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1 mb-1">
+                        <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                        <span className="text-sm font-semibold text-slate-700">{tech.rating}</span>
+                        <span className="text-xs text-slate-400">({tech.completedJobs} jobs)</span>
+                      </div>
+                      <div className="flex flex-wrap gap-1">
+                        {tech.expertise.map((exp, i) => (
+                          <span key={i} className="text-xs bg-white px-2 py-1 rounded-full text-slate-600 border border-slate-200">
+                            {exp}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="mt-2 text-xs font-semibold text-primary-600">
+                        Match Score: {tech.matchScore}%
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-slate-500">No technicians found for this appliance type.</p>
+                )}
+              </div>
+            ) : (
+              <div className="p-4 rounded-2xl bg-slate-50 border border-slate-100">
+                <div className="flex items-center gap-3 mb-2">
+                  <Briefcase className="h-5 w-5 text-slate-400" />
+                  <p className="text-sm text-slate-500">Select an appliance to see recommended technicians</p>
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="bg-white rounded-3xl border border-slate-100 shadow-sm p-6">
             <h3 className="text-lg font-bold text-slate-900 mb-4">Ready to Book?</h3>
             <p className="text-sm text-slate-600 mb-4">
